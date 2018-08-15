@@ -1,6 +1,6 @@
 class MemoryManager {
 	
-	// Variables
+	// Variáveis
 	private int[] dataStack;
 	private int[] varStack;
 	private stackPointer;
@@ -38,7 +38,7 @@ class MemoryManager {
 	}
 	
 	
-	// Methods
+	// Métodos
 	public void addData(){
 		
 	}
