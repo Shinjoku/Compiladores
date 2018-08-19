@@ -7,18 +7,18 @@ public class Main {
         Interpreter interpreter = new Interpreter();
         //MemoryManager memoryManager = new MemoryManager();
         // Coleta informações interpretadas
-        List<String> PC = interpreter.getCommands();
-        for(String command : PC)
-            System.out.println(command);
+        List<Instruction> PC = interpreter.createCommands();
+        for(Instruction inst : PC)
+            System.out.println(inst);
         
         // Executa os comandos
-        run(PC);
+        //run(PC);
     }
     
-    public static void run(List<String> PC) {
+    public static void run(List<Instruction> PC) {
         
-        for(String command : PC){
-            switch(command){
+        for(Instruction command : PC){
+            switch( command.getName() ){
                 case "ADD":
                     break;
             }

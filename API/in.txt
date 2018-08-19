@@ -1,0 +1,35 @@
+# Uso geral
+    LDC 5
+    LDV 2
+    ADD
+    SUB
+    DIVI
+    MULT
+    INV
+    AND
+    OR
+    NEG
+    CME
+    CMA
+    CEQ
+    CDIF
+    CMEQ
+    CMAQ
+    START
+    HILT
+# Atribuições
+    STR 9
+    JMP 3
+    JMPF 4
+# Operação nula
+    NULL
+# Entrada
+    RD
+# Saída
+    PRN
+# Alocação e desalocação de variáveis
+    ALLOC 8,5
+    DALLOC 5,8
+# Chamada de rotina
+    CALL
+    RETURN

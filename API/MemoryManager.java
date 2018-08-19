@@ -1,12 +1,17 @@
+import java.util.List;
+
+
 class MemoryManager {
 	
 	// Variáveis
-	private int[] dataStack;
-	private int[] varStack;
+	private List<int> dataStack;
+	private List<int> varStack;
 	private stackPointer;
 	
 	public MemoryManager() {
-		this.stackPointer = 0;
+		this.dataStack = new ArrayList<int>();
+		this.varStack = new ArrayList<int>();
+		this.stackPointer = -1;
 	}
 	
 	
@@ -39,19 +44,27 @@ class MemoryManager {
 	
 	
 	// Métodos
-	public void addData(){
+	private void addData(){
 		
 	}
 	
-	public void addVar() {
+	private void addVar() {
 		
 	}
 	
-	public void incSP(){
+	private void incSP(){
 		this.setSP(this.getSP() + 1);
 	}
 	
-	public void decSP(){
+	private void decSP(){
 		this.setSP(this.getSP() - 1);
+	}
+	
+	
+	// Instruções
+	
+	public void add(){
+		incSP();
+		
 	}
 }
