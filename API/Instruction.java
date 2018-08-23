@@ -4,11 +4,13 @@ import java.util.Collections;
 
 class Instruction {
     
+    private int id;
     private String name;
     private String params;
     
     
-    public Instruction(String name, String params) {
+    public Instruction(int id, String name, String params) {
+        this.id = id;
         this.name = name;
         this.params = params;
     }
@@ -16,9 +18,13 @@ class Instruction {
     
     // Métodos
     
+    public int getId() {
+        return this.id;
+    }
+    
     // Coleta nome da instrução
     public String getName() {
-        return name;
+        return this.name;
     }
     
     // Formata e coleta os parâmetros da instrução

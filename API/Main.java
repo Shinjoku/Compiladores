@@ -12,15 +12,40 @@ public class Main {
             System.out.println(inst);
         
         // Executa os comandos
-        //run(PC);
+        run(PC);
     }
     
     public static void run(List<Instruction> PC) {
         
+        MemoryManager memoryManager = new MemoryManager();
+        
         for(Instruction command : PC){
-            switch( command.getName() ){
-                case "ADD":
-                    break;
+            try{
+                switch( command.getName() ){
+                    case "ldc":
+                        memoryManager.ldc( command.getParams() );
+                        break;
+                    case "ldv": 
+                        memoryManager.ldv( command.getParams() );
+                        break;
+                    case "add":
+                        memoryManager.add();
+                        break;
+                    case "sub":
+                        memoryManager.sub();
+                        break;
+                    case "mult":
+                        memoryManager.mult();
+                        break;
+                    case "divi":
+                        memoryManager.divi();
+                        break;
+                    case "inv":
+                        memoryManager.inv();
+                        break;
+                }
+            } catch(Exception e) {
+                System.out.println("Line " + command.getId() + ": " + e);
             }
         }
         
