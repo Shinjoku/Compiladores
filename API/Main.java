@@ -22,6 +22,9 @@ public class Main {
         for(Instruction command : PC){
             try{
                 switch( command.getName() ){
+                    case "start":
+                        memoryManager.start();
+                        break;
                     case "ldc":
                         memoryManager.ldc( command.getParams() );
                         break;
@@ -42,6 +45,15 @@ public class Main {
                         break;
                     case "inv":
                         memoryManager.inv();
+                        break;
+                    case "and":
+                        memoryManager.and();
+                        break;
+                    case "or":
+                        memoryManager.or();
+                        break;
+                    case "neg":
+                        memoryManager.neg();
                         break;
                 }
             } catch(Exception e) {

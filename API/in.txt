@@ -1,11 +1,18 @@
 # Uso geral
+START
     LDC 5
     LDC 9
-    
     LDV 0
     LDC 1
     ADD
-    
     SUB
     INV
     SUB
+    NEG
+    
+    LDC 9
+    LDC 7
+    LDC 2
+    MULT
+    DIV
+    AND

@@ -10,7 +10,7 @@ class MemoryManager {
 
 	public MemoryManager() {
 		this.dataStack = new ArrayList<Integer>();
-		this.stackPointer = -1;
+		this.stackPointer = 0;
 	}
 	
 	
@@ -61,31 +61,33 @@ class MemoryManager {
 	
 	// Instruções
 	
+	public void start() {
+		decSP();
+	}
+	
 	public void ldc(List<Integer> k) {
 		incSP();
 		addData( this.stackPointer, k.get(0) );
-	} // Working
+	}
 	
 	public void ldv(List<Integer> n) {
+		int actualValue = this.dataStack.get( getSP() );
+		
 		incSP();
-		addData( this.stackPointer, this.dataStack.get( n.get(0) ));
+		addData( this.stackPointer, actualValue );
 	}
 	
 	public void add() {
-		
 		int previousValue = this.dataStack.get( getSP() - 1 );
 		int actualValue = this.dataStack.get( getSP() );
-		
 		
 		addData( getSP() - 1, previousValue + actualValue );
 		decSP();
 	}
 	
 	public void sub() {
-		
 		int previousValue = this.dataStack.get( getSP() - 1 );
 		int actualValue = this.dataStack.get( getSP() );
-		
 		
 		addData( getSP() - 1, previousValue - actualValue );
 		decSP();
@@ -114,6 +116,35 @@ class MemoryManager {
 	public void inv() {
 		int actualValue = this.dataStack.get( getSP() );
 		addData( getSP(), actualValue * (-1) );
+	}
+	
+	public void and() {
+		int previousValue = this.dataStack.get( getSP() - 1 );
+		int actualValue = this.dataStack.get( getSP() );
+		
+		if(previousValue == 1 && actualValue == 1)
+			addData( getSP() - 1, 1 );
+		else
+			addData( getSP() - 1, 0 );
+			
+		decSP();
+	}
+	
+	public void or() {
+		int previousValue = this.dataStack.get( getSP() - 1 );
+		int actualValue = this.dataStack.get( getSP() );
+		
+		if(previousValue == 1 || actualValue == 1)
+			addData( getSP() - 1, 1 );
+		else
+			addData( getSP() - 1, 0 );
+			
+		decSP();
+	}
+	
+	public void neg() {
+		int actualValue = this.dataStack.get( getSP() );
+		addData( getSP(), 1 - actualValue );
 	}
 	
 	

@@ -90,7 +90,7 @@ class Interpreter {
         
         for(String line : lines) {
             command = extractCommand(id++, line);
-            if(command)
+            if(command != null)
                 commands.add( command );
         }
         
