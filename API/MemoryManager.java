@@ -147,5 +147,76 @@ class MemoryManager {
 		addData( getSP(), 1 - actualValue );
 	}
 	
+	public void cme() {
+		int previousValue = this.dataStack.get( getSP() - 1 );
+		int actualValue = this.dataStack.get( getSP() );
+		
+		if(previousValue < actualValue)
+			addData( getSP() - 1, 1 );
+		else
+			addData( getSP() - 1, 0 );
+			
+		decSP();
+	}
 	
+	public void cma() {
+		int previousValue = this.dataStack.get( getSP() - 1 );
+		int actualValue = this.dataStack.get( getSP() );
+		
+		if(previousValue > actualValue)
+			addData( getSP() - 1, 1 );
+		else
+			addData( getSP() - 1, 0 );
+			
+		decSP();
+	}
+	
+	public void ceq() {
+		int previousValue = this.dataStack.get( getSP() - 1 );
+		int actualValue = this.dataStack.get( getSP() );
+		
+		if(previousValue == actualValue)
+			addData( getSP() - 1, 1 );
+		else
+			addData( getSP() - 1, 0 );
+			
+		decSP();
+	}
+	
+	public void cdif() {
+		int previousValue = this.dataStack.get( getSP() - 1 );
+		int actualValue = this.dataStack.get( getSP() );
+		
+		if(previousValue != actualValue)
+			addData( getSP() - 1, 1 );
+		else
+			addData( getSP() - 1, 0 );
+			
+		decSP();
+	}
+	
+	public void cmeq() {
+		int previousValue = this.dataStack.get( getSP() - 1 );
+		int actualValue = this.dataStack.get( getSP() );
+		
+		if(previousValue <= actualValue)
+			addData( getSP() - 1, 1 );
+		else
+			addData( getSP() - 1, 0 );
+			
+		decSP();
+	}
+	
+	public void cmaq() {
+		int previousValue = this.dataStack.get( getSP() - 1 );
+		int actualValue = this.dataStack.get( getSP() );
+		
+		if(previousValue >= actualValue)
+			addData( getSP() - 1, 1 );
+		else
+			addData( getSP() - 1, 0 );
+			
+		decSP();
+	}
+
 }

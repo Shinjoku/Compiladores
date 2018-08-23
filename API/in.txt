@@ -16,3 +16,4 @@ START
     MULT
     DIV
     AND
+HLT

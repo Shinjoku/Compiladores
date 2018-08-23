@@ -12,16 +12,20 @@ public class Main {
             System.out.println(inst);
         
         // Executa os comandos
-        run(PC);
+        if( run(PC) )
+            System.out.println("Máquina encerrada com sucesso.");
+        else
+            System.out.println("Máquina encerrada a força.");
     }
     
-    public static void run(List<Instruction> PC) {
+    public static boolean run(List<Instruction> PC) {
         
         MemoryManager memoryManager = new MemoryManager();
+        boolean fin = false;
         
-        for(Instruction command : PC){
-            try{
-                switch( command.getName() ){
+        for(Instruction command : PC) {
+            try {
+                switch( command.getName() ) {
                     case "start":
                         memoryManager.start();
                         break;
@@ -55,11 +59,33 @@ public class Main {
                     case "neg":
                         memoryManager.neg();
                         break;
+                    case "cme":
+                        memoryManager.cme();
+                        break;
+                    case "cma":
+                        memoryManager.cma();
+                        break;
+                    case "ceq":
+                        memoryManager.ceq();
+                        break;
+                    case "cdif":
+                        memoryManager.cdif();
+                        break;
+                    case "cmeq":
+                        memoryManager.cmeq();
+                        break;
+                    case "cmaq":
+                        memoryManager.cmaq();
+                        break;
+                    case "hlt":
+                        fin = true;
+                        break;
                 }
             } catch(Exception e) {
                 System.out.println("Line " + command.getId() + ": " + e);
             }
         }
-        
+        if(fin) return true;
+        return false;
     }
 }
