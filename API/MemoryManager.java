@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.lang.IndexOutOfBoundsException;
 
 class MemoryManager {
@@ -28,14 +29,6 @@ class MemoryManager {
 	private void setSP(int value){
 		this.stackPointer = value;
 	}
-	
-	// private void setDataStackValue(int pos, int value){
-	// 	this.dataStack[pos] = value;
-	// }
-	
-	// private void setVarStackValue(int pos, int value){
-	// 	this.varStack[pos] = value;
-	// }
 	
 	
 	// Métodos
@@ -94,7 +87,6 @@ class MemoryManager {
 	}
 	
 	public void mult() {
-		
 		int previousValue = this.dataStack.get( getSP() - 1 );
 		int actualValue = this.dataStack.get( getSP() );
 		
@@ -104,7 +96,6 @@ class MemoryManager {
 	}
 	
 	public void divi() {
-		
 		int previousValue = this.dataStack.get( getSP() - 1 );
 		int actualValue = this.dataStack.get( getSP() );
 		
@@ -218,5 +209,73 @@ class MemoryManager {
 			
 		decSP();
 	}
-
+	
+	public void str(List<Integer> n) {
+		int actualValue = this.dataStack.get( getSP() );
+		
+		addData(n.get(0), actualValue);
+		decSP();
+	}
+	
+	public int jmp(List<Integer> t) {
+		return t.get(0);
+	}
+	
+	public int jmpf(List<Integer> t, int i) {
+		int actualValue = this.dataStack.get( getSP() );
+		
+		decSP();
+		if (actualValue == 0)
+			return t.get(0);
+		else
+			return i + 1;
+	}
+	
+	public void rd() {
+		Scanner in = new Scanner(System.in);
+		
+		incSP();
+		addData( getSP(), in.nextInt() );
+	}
+	
+	public void prn() {
+		System.out.println( this.dataStack.get(getSP()) );
+		decSP();
+	}
+	
+	public void alloc(List<Integer> params) {
+		int m = params.get(0);
+		int n = params.get(1);
+		int i;
+		
+		for(i = 0; i < n - 1; i++) {
+			incSP();
+			addData(getSP(), this.dataStack.get(m + i) );
+		}
+	}
+	
+	public void dalloc(List<Integer> params) {
+		int i;
+		int actualValue;
+		int m = params.get(0);
+		int n = params.get(1);
+		
+		for(i = n - 1; i >= 0; i--) {
+			actualValue = this.dataStack.get( getSP() );
+			addData(m + i, actualValue );
+			decSP();
+		}
+	}
+	
+	public int call(List<Integer> t, int i) {
+		incSP();
+		addData(getSP(), i + 1);
+		return t.get(0);
+	}
+	
+	public int retrn() {
+		int actualValue = this.dataStack.get( getSP() );
+		decSP();
+		return actualValue;
+	}
 }
