@@ -83,7 +83,7 @@ class Interpreter {
     //  Retorno: 1 para sucesso, 0 para falha.
     public List<Instruction> createCommands() {
         
-        int id = 1;
+        int id = 0;
         Instruction command;
         List<Instruction> commands = new ArrayList<Instruction>();
         List<String> lines = getFileLines();

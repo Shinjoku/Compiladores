@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main (String[] args) {
@@ -21,10 +22,12 @@ public class Main {
     public static boolean run(List<Instruction> programCounter) {
         
         int i;
+        int pcSize = programCounter.size();
         boolean fin = false;
+        Scanner in = new Scanner(System.in);
         MemoryManager memoryManager = new MemoryManager();
         
-        for( i = 0; i < programCounter.size(); i++) {
+        for( i = 0; i < pcSize; i++) {
             try {
                 switch( programCounter.get(i).getName() ) {
                     case "start":
@@ -111,7 +114,7 @@ public class Main {
                         break;
                     
                     case "rd":
-                        memoryManager.rd();
+                        memoryManager.rd(in.nextInt());
                         break;
                         
                     case "prn":
@@ -137,6 +140,7 @@ public class Main {
             } catch(Exception e) {
                 System.out.println("Line " + programCounter.get(i).getId() + ": " + e);
             }
+            System.out.println("Executou linha " + programCounter.get(i).getId());
         }
         if(fin) return true;
         return false;

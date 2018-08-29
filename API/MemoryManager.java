@@ -33,13 +33,12 @@ class MemoryManager {
 	
 	// Métodos
 
+	// Tenta substituir valor. Se não houver posição, cria uma.
 	private void addData(int index, int k) {
 		try {
 			this.dataStack.set(index, k);
-			System.out.println(this.dataStack.get(index));
 		} catch(IndexOutOfBoundsException e) {
 			this.dataStack.add(index, k);
-			System.out.println(this.dataStack.get(index));
 		}
 	}
 	
@@ -54,15 +53,18 @@ class MemoryManager {
 	
 	// Instruções
 	
+	// S:= s - 1
 	public void start() {
 		decSP();
 	}
 	
+	// S = s + 1, M[s] = k
 	public void ldc(List<Integer> k) {
 		incSP();
 		addData( this.stackPointer, k.get(0) );
 	}
 	
+	// S = s + 1, M[s] = M[n]
 	public void ldv(List<Integer> n) {
 		int actualValue = this.dataStack.get( getSP() );
 		
@@ -70,6 +72,7 @@ class MemoryManager {
 		addData( this.stackPointer, actualValue );
 	}
 	
+	// M[s - 1] = M[s - 1] + M[s], S = s - 1
 	public void add() {
 		int previousValue = this.dataStack.get( getSP() - 1 );
 		int actualValue = this.dataStack.get( getSP() );
@@ -78,6 +81,7 @@ class MemoryManager {
 		decSP();
 	}
 	
+	// M[s - 1] = M[s - 1] - M[s], S = s - 1
 	public void sub() {
 		int previousValue = this.dataStack.get( getSP() - 1 );
 		int actualValue = this.dataStack.get( getSP() );
@@ -86,29 +90,31 @@ class MemoryManager {
 		decSP();
 	}
 	
+	// M[s - 1] = M[s - 1] * M[s], S = s - 1
 	public void mult() {
 		int previousValue = this.dataStack.get( getSP() - 1 );
 		int actualValue = this.dataStack.get( getSP() );
-		
 		
 		addData( getSP() - 1, previousValue * actualValue );
 		decSP();
 	}
 	
+	// M[s - 1] = M[s - 1] / M[s], S = s - 1
 	public void divi() {
 		int previousValue = this.dataStack.get( getSP() - 1 );
 		int actualValue = this.dataStack.get( getSP() );
-		
 		
 		addData( getSP() - 1, previousValue / actualValue );
 		decSP();
 	}
 	
+	// M[s] = -M[s]
 	public void inv() {
 		int actualValue = this.dataStack.get( getSP() );
 		addData( getSP(), actualValue * (-1) );
 	}
 	
+	// se M [s-1] = 1 e M[s] = 1  então M[s-1]:=1  senão M[s-1]:=0;  s:=s - 1 
 	public void and() {
 		int previousValue = this.dataStack.get( getSP() - 1 );
 		int actualValue = this.dataStack.get( getSP() );
@@ -121,6 +127,7 @@ class MemoryManager {
 		decSP();
 	}
 	
+	// se M[s-1] = 1  ou M[s] = 1  então M[s-1] =1  senão M[s-1] =0; s =s - 1 
 	public void or() {
 		int previousValue = this.dataStack.get( getSP() - 1 );
 		int actualValue = this.dataStack.get( getSP() );
@@ -133,11 +140,13 @@ class MemoryManager {
 		decSP();
 	}
 	
+	//  M[s]:=1 - M[s] 
 	public void neg() {
 		int actualValue = this.dataStack.get( getSP() );
 		addData( getSP(), 1 - actualValue );
 	}
 	
+	// se M[s-1] < M[s]  então M[s-1]:=1 senão M[s-1]:=0; s:=s - 1 
 	public void cme() {
 		int previousValue = this.dataStack.get( getSP() - 1 );
 		int actualValue = this.dataStack.get( getSP() );
@@ -150,6 +159,7 @@ class MemoryManager {
 		decSP();
 	}
 	
+	// se M[s-1] > M[s]  então M[s-1]:=1 senão M[s-1]:=0; s:=s - 1 
 	public void cma() {
 		int previousValue = this.dataStack.get( getSP() - 1 );
 		int actualValue = this.dataStack.get( getSP() );
@@ -162,6 +172,7 @@ class MemoryManager {
 		decSP();
 	}
 	
+	// se M[s-1] = M[s]  então M[s-1]:=1 senão M[s-1]:=0; s:=s - 1 
 	public void ceq() {
 		int previousValue = this.dataStack.get( getSP() - 1 );
 		int actualValue = this.dataStack.get( getSP() );
@@ -174,6 +185,7 @@ class MemoryManager {
 		decSP();
 	}
 	
+	// se M[s-1] != M[s]  então M[s-1]:=1 senão M[s-1]:=0; s:=s - 1 
 	public void cdif() {
 		int previousValue = this.dataStack.get( getSP() - 1 );
 		int actualValue = this.dataStack.get( getSP() );
@@ -185,7 +197,8 @@ class MemoryManager {
 			
 		decSP();
 	}
-	
+
+	// se M[s-1] <= M[s]  então M[s-1]:=1 senão M[s-1]:=0; s:=s - 1 
 	public void cmeq() {
 		int previousValue = this.dataStack.get( getSP() - 1 );
 		int actualValue = this.dataStack.get( getSP() );
@@ -198,6 +211,7 @@ class MemoryManager {
 		decSP();
 	}
 	
+	// se M[s-1] >= M[s]  então M[s-1]:=1 senão M[s-1]:=0; s:=s - 1 
 	public void cmaq() {
 		int previousValue = this.dataStack.get( getSP() - 1 );
 		int actualValue = this.dataStack.get( getSP() );
@@ -209,7 +223,8 @@ class MemoryManager {
 			
 		decSP();
 	}
-	
+
+	// M[n]:= M[s]; s:= s-1 
 	public void str(List<Integer> n) {
 		int actualValue = this.dataStack.get( getSP() );
 		
@@ -217,10 +232,12 @@ class MemoryManager {
 		decSP();
 	}
 	
+	// i = t
 	public int jmp(List<Integer> t) {
 		return t.get(0);
 	}
 	
+	// se M[s] = 0 então i:=t senão i:=i + 1; s:=s-1 
 	public int jmpf(List<Integer> t, int i) {
 		int actualValue = this.dataStack.get( getSP() );
 		
@@ -230,30 +247,40 @@ class MemoryManager {
 		else
 			return i + 1;
 	}
-	
-	public void rd() {
-		Scanner in = new Scanner(System.in);
-		
+
+	// S:=s + 1; M[s]:= “próximo valor de entrada”. 	
+	public void rd(int value) {
 		incSP();
-		addData( getSP(), in.nextInt() );
+		addData(getSP(), value);
 	}
 	
+	//  “Imprimir M[s]”; s:=s-1
 	public void prn() {
 		System.out.println( this.dataStack.get(getSP()) );
 		decSP();
 	}
 	
+	// Para k:=0 até n-1 faça {s:=s + 1; M[s]:=M[m+k]} 
 	public void alloc(List<Integer> params) {
+		int i;
 		int m = params.get(0);
 		int n = params.get(1);
-		int i;
-		
-		for(i = 0; i < n - 1; i++) {
+		int value;
+
+		for(i = 0; i < (n - 1); i++) {
 			incSP();
-			addData(getSP(), this.dataStack.get(m + i) );
+			
+			// Caso seja a primeira locação de memória
+			try{
+				value = this.dataStack.get(m + i);
+			} catch(IndexOutOfBoundsException e) {
+				value = 0;
+			}
+			addData(getSP(), value);
 		}
 	}
 	
+	// Para k:=n-1 até 0 faça {M[m+k]:=M[s]; s:=s - 1} 
 	public void dalloc(List<Integer> params) {
 		int i;
 		int actualValue;
@@ -267,12 +294,14 @@ class MemoryManager {
 		}
 	}
 	
+	// S:=s + 1; M[s]:= i+ 1; i:=t 
 	public int call(List<Integer> t, int i) {
 		incSP();
 		addData(getSP(), i + 1);
 		return t.get(0);
 	}
 	
+	// i:=M[s]; s:=s - 1 
 	public int retrn() {
 		int actualValue = this.dataStack.get( getSP() );
 		decSP();

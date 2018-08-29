@@ -1,19 +1,38 @@
-# Uso geral
-START
-    LDC 5
-    LDC 9
+    START
+    ALLOC 0,2
+    JMP 27
+NULL
+    ALLOC 2,1
+    LDV 0
+    STR 2
     LDV 0
     LDC 1
-    ADD
     SUB
-    INV
-    SUB
-    NEG
-    
-    LDC 9
-    LDC 7
-    LDC 2
+    STR 0
+    LDV 2
+    LDC 1
+    CMA
+    JMPF 17
+    CALL 3
+    JMP 20
+NULL
+    LDC 1
+    STR 1
+NULL
+    LDV 1
+    LDV 2
     MULT
-    DIV
-    AND
-HLT
+    STR 1
+    DALLOC 2,1
+    RETURN
+NULL
+    RD
+    STR 0
+    CALL 3
+    LDV 0
+    PRN
+    LDV 1
+    PRN
+    DALLOC 0,2
+    HLT
+    
