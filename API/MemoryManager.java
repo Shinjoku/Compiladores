@@ -16,7 +16,7 @@ class MemoryManager {
 	
 	
 	// Getters
-	private int getSP(){
+	public int getSP(){
 		return this.stackPointer;
 	}
 	
@@ -50,6 +50,13 @@ class MemoryManager {
 		this.setSP(this.getSP() - 1);
 	}
 	
+	public void printState() {
+		System.out.println("Pilha de dados: --------------------");
+		for(int value : this.dataStack)
+			System.out.print(value + " ");
+		System.out.println("\n------------------------------------");
+	}
+	
 	
 	// Instruções
 	
@@ -61,15 +68,15 @@ class MemoryManager {
 	// S = s + 1, M[s] = k
 	public void ldc(List<Integer> k) {
 		incSP();
-		addData( this.stackPointer, k.get(0) );
+		addData( getSP(), k.get(0) );
 	}
 	
 	// S = s + 1, M[s] = M[n]
 	public void ldv(List<Integer> n) {
-		int actualValue = this.dataStack.get( getSP() );
 		
 		incSP();
-		addData( this.stackPointer, actualValue );
+		int value = this.dataStack.get( n.get(0) );
+		addData( getSP() , value );
 	}
 	
 	// M[s - 1] = M[s - 1] + M[s], S = s - 1
@@ -234,7 +241,7 @@ class MemoryManager {
 	
 	// i = t
 	public int jmp(List<Integer> t) {
-		return t.get(0);
+		return t.get(0) - 1;	// Cancela o incremento implícito
 	}
 	
 	// se M[s] = 0 então i:=t senão i:=i + 1; s:=s-1 
@@ -243,9 +250,9 @@ class MemoryManager {
 		
 		decSP();
 		if (actualValue == 0)
-			return t.get(0);
+			return t.get(0) - 1;
 		else
-			return i + 1;
+			return i;	// Cancela o incremento implícito
 	}
 
 	// S:=s + 1; M[s]:= “próximo valor de entrada”. 	
@@ -262,17 +269,16 @@ class MemoryManager {
 	
 	// Para k:=0 até n-1 faça {s:=s + 1; M[s]:=M[m+k]} 
 	public void alloc(List<Integer> params) {
-		int i;
+		int k;
 		int m = params.get(0);
 		int n = params.get(1);
 		int value;
 
-		for(i = 0; i < (n - 1); i++) {
+		for(k = 0; k <= (n - 1); k++) {
 			incSP();
-			
 			// Caso seja a primeira locação de memória
-			try{
-				value = this.dataStack.get(m + i);
+			try {
+				value = this.dataStack.get(m + k);
 			} catch(IndexOutOfBoundsException e) {
 				value = 0;
 			}
@@ -282,14 +288,14 @@ class MemoryManager {
 	
 	// Para k:=n-1 até 0 faça {M[m+k]:=M[s]; s:=s - 1} 
 	public void dalloc(List<Integer> params) {
-		int i;
+		int k;
 		int actualValue;
 		int m = params.get(0);
 		int n = params.get(1);
 		
-		for(i = n - 1; i >= 0; i--) {
-			actualValue = this.dataStack.get( getSP() );
-			addData(m + i, actualValue );
+		for (k = (n-1); k >= 0; k--) {
+			actualValue = this.dataStack.get(getSP());
+			addData(m+k, actualValue);
 			decSP();
 		}
 	}
