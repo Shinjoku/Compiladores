@@ -13,7 +13,7 @@ class Interpreter {
     // Extrai o comando contido em uma linha, criando um novo objeto Command;
     //  Parâmetros: Linha coletada do arquivo.
     //  Retorno: Objeto do tipo Command
-    private Instruction extractCommand(String line){
+    private Instruction extractCommand(int id, String line){
         
         int i = 0;
         int lineLen = line.length();
@@ -29,6 +29,9 @@ class Interpreter {
             i++;
         }
         
+        if(name == "")
+            return null;
+        
         // Se houver parâmetro
         if( i < (lineLen - 1) ){
             
@@ -42,7 +45,7 @@ class Interpreter {
             }
         }
         
-        return new Instruction(name, param);
+        return new Instruction(id, name, param);
     }
     
     public List<String> getFileLines() {
@@ -80,11 +83,15 @@ class Interpreter {
     //  Retorno: 1 para sucesso, 0 para falha.
     public List<Instruction> createCommands() {
         
+        int id = 0;
+        Instruction command;
         List<Instruction> commands = new ArrayList<Instruction>();
         List<String> lines = getFileLines();
         
         for(String line : lines) {
-            commands.add( extractCommand(line) );
+            command = extractCommand(id++, line);
+            if(command != null)
+                commands.add( command );
         }
         
         return commands;
