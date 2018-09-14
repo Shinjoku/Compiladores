@@ -28,6 +28,8 @@ public class Main {
         MemoryManager memoryManager = new MemoryManager();
         
         for( i = 0; i < pcSize; i++) {
+            System.out.println("Executando linha " + programCounter.get(i).getId() + ". Comando: " + programCounter.get(i).getName() + ". Valor SP: " + memoryManager.getSP());
+            memoryManager.printState();
             try {
                 switch( programCounter.get(i).getName() ) {
                     case "start":
@@ -40,6 +42,10 @@ public class Main {
                         
                     case "ldv": 
                         memoryManager.ldv( programCounter.get(i).getParams() );
+                        break;
+                        
+                    case "str":
+                        memoryManager.str( programCounter.get(i).getParams() );
                         break;
                         
                     case "add":
@@ -134,13 +140,12 @@ public class Main {
                         break;
                         
                     case "return":
-                        memoryManager.retrn();
+                        i = memoryManager.retrn();
                         break;
                 }
             } catch(Exception e) {
                 System.out.println("Line " + programCounter.get(i).getId() + ": " + e);
             }
-            System.out.println("Executou linha " + programCounter.get(i).getId());
         }
         if(fin) return true;
         return false;
