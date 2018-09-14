@@ -6,6 +6,9 @@
 package gui;
 
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.JFrame;
 
 /**
  *
@@ -17,6 +20,8 @@ public class GUI {
      * @param args the command line arguments
      */
     private static String [] colunsNames = {"ID", "Comando", "Entrada 1", "Entrada 2"};
+    
+    private static int cntColum = 0;
     
     private static Object [][] data = {
         {1, "ADD", "1", "2"},
@@ -32,28 +37,52 @@ public class GUI {
         //new my.mvgui.MVGUI().setVisible(true);
         
         GUINovo tela = new GUINovo();
-        System.out.println(tela.getTable().getRowCount());
         tela.row(data);
+        /*
+        depois de criar e preencher a tabela na frame são adicionados dois listeners
+        um para o botão continuar que começa a ler até achar um break,
+        e um que percebe quando a tabela é modificada, ou seja, um break é criado.
+        */
+        //Listener do botão
+        tela.ContButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                readTable(tela);
+            }
+        });
+        //Listener da criação de Breaks/checkboxes
+        tela.tableComandos.getModel().addTableModelListener((tme) -> {
+            DefaultTableModel model = (DefaultTableModel) tela.tableComandos.getModel();
+            //vericica qual linha foi altera
+            int rowSelect = tela.tableComandos.getSelectedRow();
+            //verifica qual foi a alteração
+            boolean effect = (Boolean)model.getValueAt(rowSelect, 4);
+        });
+        
         //tela.entradaPopup();
-        tela.wait();
+        
         tela.setVisible(true);
-        readTable(tela);
         //tela.getTable().getModel().setValueAt(data[0][0],0,0);
     }
     
     public static void readTable(GUINovo tela){
-        int cntColum;
-        boolean breakPoint = false;
+        boolean breakPoint = false, find = true;
         DefaultTableModel model = (DefaultTableModel) tela.tableComandos.getModel();
-        for(cntColum = 0; model.getColumnCount() >= cntColum; cntColum++){
+        for(;model.getColumnCount() >= cntColum; cntColum++){
             breakPoint = (Boolean)model.getValueAt(cntColum, 4);
             if(breakPoint){
-                System.out.println("Break Point Acionado");
+                 find = false;
+                 break;
             }
             System.out.println("gui.GUI.readTable()"+(String)model.getValueAt(cntColum, 1));
-            /*
-            lê os comandos aqui
-            */            
+                    /*
+                    lê os comandos aqui
+                    */            
+        }
+                //reeinicia contador
+        if(find){
+            System.out.println("\n");
+            cntColum =0;
         }
     }
     

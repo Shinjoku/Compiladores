@@ -252,7 +252,6 @@ public class GUINovo extends javax.swing.JFrame {
 
     private void ContButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ContButtonActionPerformed
         // TODO add your handling code here:
-        this.ContButton.notify();
     }//GEN-LAST:event_ContButtonActionPerformed
 
     /**
@@ -293,6 +292,8 @@ public class GUINovo extends javax.swing.JFrame {
     public javax.swing.JTable getTable(){
         return this.tableComandos;
     }
+    
+    //Função para preencher a tabela de comandos
     public void row(Object [][] data){
         int cntColum;
         DefaultTableModel model = (DefaultTableModel) tableComandos.getModel();
@@ -300,6 +301,31 @@ public class GUINovo extends javax.swing.JFrame {
             //tableComandos.getModel().setValueAt(data[cntColum][cntLine], cntColum, cntLine);
             model.addRow(data[cntColum]);
             model.setValueAt(false, cntColum, 4);
+        }
+        
+    }
+    
+    //função para preencher caixa de breakPoints
+    public boolean breakAdd(int row, boolean action){
+        String conteudo;
+        conteudo = String.valueOf(row);
+        //verifica se deve adicionar(true) ou remover(false)
+        if(action){
+            conteudo = conteudo + '\n';
+            this.breakArea.append(conteudo);
+        }
+        else{
+            //leitor de area
+            //tentando dividir o conteudo para ler
+            for(String line : this.breakArea.getText().split("\n")){
+                if(conteudo == line){
+                    //this.breakArea.remove;
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
         }
         
     }
