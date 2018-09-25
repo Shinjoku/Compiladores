@@ -12,12 +12,57 @@ public class Tokenizer {
 		// TODO Auto-generated method stub
 		//enquanto não fim
 		Ler();//função de leitura
-		while (caracter != '.') {
-			
+		//loop final de arquivo
+			while (caracter == '{' || caracter == ' ') { //ou fim de arquivo
+				if (caracter == '{') {
+					while (caracter != '}') {// e arquivo não acabou
+						Ler();
+					}
+				}
+				while (caracter == ' ') {
+					Ler();
+				}
+			}
+			//se não acabou
+			pegarToken();
+		//fim do loop final de arquivo
+	}
+	
+	private static void pegarToken() {
+		if (Character.isDigit(caracter)) {
+			trataDigito();
+		}
+		else {
+			if (Character.isLetter(caracter)) {
+				trataIdentPalaReser();
+			}
+			else {
+				if (caracter == ':') {
+					trataAtribuicao();
+				}
+				else {
+					if (caracter == '+' || caracter == '-' || caracter == '*') {
+						trataOA();
+					}
+					else {
+						if (caracter == '<' || caracter == '>' || caracter == '=') {
+							trataOR();
+						}
+						else {
+							if (caracter == ';' || caracter == ',' || caracter == '(' || caracter == '.') {
+								trataPontuacao();
+							}
+							else {
+								//ERRO
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
-	public void trataDigito() {
+	private static void trataDigito() {
 		String num = null;
 		num = num + caracter;
 		Ler();
@@ -30,7 +75,7 @@ public class Tokenizer {
 		
 	}
 	
-	public void trataIdentPalaReser() {
+	private static void trataIdentPalaReser() {
 		String id = null;
 		id = id + caracter;
 		Ler();
@@ -107,6 +152,75 @@ public class Tokenizer {
 				//simbolo sidentificador
 				break;
 		}
+		
+	}
+	
+	private static void trataAtribuicao() {
+		String atr = null;
+		atr = atr + caracter;
+		if (caracter == ':') {
+			Ler();
+			if (caracter == '=') {
+				atr = atr + caracter;
+				//satribuição
+			}
+			else {
+				//sdoispontos
+			}
+		}
+	}
+	
+	private static void trataOA() {
+		if (caracter == '+') {
+			//smais
+		}
+		else {
+			if (caracter == '-') {
+				//smenos
+			}
+			else {
+				if (caracter == '*') {
+					//smult
+				}
+			}
+		}
+		Ler();
+	}
+	
+	private static void trataOR() {
+		String or = null;
+		or = or + caracter;
+		if (caracter == '<') {
+			Ler();
+			if (caracter == '=') {
+				or = or + caracter;
+				//smenoring
+			}
+			else {
+				//smenor
+			}
+		}
+		else {
+			if (caracter == '>') {
+				Ler();
+				if (caracter == '=') {
+					or = or + caracter;
+					//smaioring
+				}
+				else {
+					//smaior
+				}
+			}
+			else {
+				if (caracter == '=') {
+					//sig
+					Ler();
+				}
+			}
+		}
+	}
+	
+	private static void trataPontuacao() {
 		
 	}
 	
