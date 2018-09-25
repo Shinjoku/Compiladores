@@ -5,6 +5,8 @@
  */
 package gui;
 
+import javax.swing.DefaultListModel;
+import javax.swing.ListModel;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -44,8 +46,8 @@ public class GUINovo extends javax.swing.JFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         saidaArea = new javax.swing.JTextArea();
         jPanel6 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        breakArea = new javax.swing.JTextArea();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        breakArea = new javax.swing.JTable();
         ContButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -163,25 +165,31 @@ public class GUINovo extends javax.swing.JFrame {
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED), "Break Point", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
-        breakArea.setEditable(false);
-        breakArea.setColumns(20);
-        breakArea.setRows(5);
-        jScrollPane4.setViewportView(breakArea);
+        breakArea.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                ""
+            }
+        ));
+        jScrollPane6.setViewportView(breakArea);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         ContButton.setText("Continuar");
@@ -207,7 +215,7 @@ public class GUINovo extends javax.swing.JFrame {
                         .addGap(12, 12, 12)
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -222,7 +230,7 @@ public class GUINovo extends javax.swing.JFrame {
                         .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(ContButton)
                 .addGap(25, 25, 25))
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -306,30 +314,31 @@ public class GUINovo extends javax.swing.JFrame {
     }
     
     //função para preencher caixa de breakPoints
-    public boolean breakAdd(int row, boolean action){
-        String conteudo;
-        conteudo = String.valueOf(row);
+    public void breakAdd(int row){
+        Object [] conteudo = new Object[1];
+        boolean find = false;
+        DefaultTableModel model = (DefaultTableModel) breakArea.getModel();
+        conteudo[0] = (Integer) row;
         //verifica se deve adicionar(true) ou remover(false)
-        if(action){
-            conteudo = conteudo + '\n';
-            this.breakArea.append(conteudo);
-        }
-        else{
-            //leitor de area
-            //tentando dividir o conteudo para ler
-            for(String line : this.breakArea.getText().split("\n")){
-                if(conteudo == line){
-                    //this.breakArea.remove;
-                    return true;
-                }
-                else{
-                    return false;
-                }
-            }
-        }
+         model.addRow(conteudo);
+       
         
     }
     
+    public void breakRemove(int row){
+        int conteudo =0;
+        DefaultTableModel model = (DefaultTableModel) breakArea.getModel();
+        //procura na tabela Break pelo ponto removido
+        for(int count = 0; model.getColumnCount()>= count; count++){
+            conteudo = (Integer) model.getValueAt(count, 0);
+            if(conteudo == row){
+                //caso encontre remove o ponto e sai da busca
+                //isso evita que ao retirar o ultimo ou unico item não de erro
+                model.removeRow(count);
+                break;
+            }
+        }
+    }
     public void entradaPopup(){
         /*quando o comando RD é executado a view vai gerar um popup
         que vai receber uma string a ser usada no comando
@@ -352,10 +361,10 @@ public class GUINovo extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JButton ContButton;
-    private javax.swing.JTextArea breakArea;
+    private javax.swing.JTable breakArea;
     private static javax.swing.JTable conteudoTable;
     private javax.swing.JTextArea entradaArea;
-    private javax.swing.JPanel jPanel1;
+    private static javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -364,8 +373,8 @@ public class GUINovo extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTextArea saidaArea;
     public static javax.swing.JTable tableComandos;
     // End of variables declaration//GEN-END:variables

@@ -8,7 +8,9 @@ package gui;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Objects;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -57,6 +59,13 @@ public class GUI {
             int rowSelect = tela.tableComandos.getSelectedRow();
             //verifica qual foi a alteração
             boolean effect = (Boolean)model.getValueAt(rowSelect, 4);
+            if(effect){
+                tela.breakAdd(rowSelect);
+            }
+            else{
+                tela.breakRemove(rowSelect);
+            }
+            
         });
         
         //tela.entradaPopup();
@@ -66,23 +75,33 @@ public class GUI {
     }
     
     public static void readTable(GUINovo tela){
-        boolean breakPoint = false, find = true;
+        boolean breakPoint = false, find = false;
+        Object input = null;
         DefaultTableModel model = (DefaultTableModel) tela.tableComandos.getModel();
         for(;model.getColumnCount() >= cntColum; cntColum++){
             breakPoint = (Boolean)model.getValueAt(cntColum, 4);
             if(breakPoint){
-                 find = false;
+                 find = true;
                  break;
             }
-            System.out.println("gui.GUI.readTable()"+(String)model.getValueAt(cntColum, 1));
+            if(Objects.equals(model.getValueAt(cntColum, 1), "SUM")){
+                input = JOptionPane.showInputDialog("Entre os dados desejados");
+                System.out.println("gui.GUI.readTable()"+input);
+            }
+            else{
+                System.out.println("gui.GUI.readTable()"+(String)model.getValueAt(cntColum, 1));
+            }
                     /*
                     lê os comandos aqui
                     */            
         }
                 //reeinicia contador
-        if(find){
+        if(!find){
             System.out.println("\n");
             cntColum =0;
+        }
+        else{
+            cntColum ++;
         }
     }
     
