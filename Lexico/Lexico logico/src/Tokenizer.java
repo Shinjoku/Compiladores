@@ -224,7 +224,7 @@ public class Tokenizer {
 		
 	}
 	
-	public static void Ler() {
+	private static void Ler() {
 		count ++;
 		caracter = test.charAt(count);
 	}
