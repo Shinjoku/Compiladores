@@ -9,47 +9,46 @@ public class Tokenizer {
 	//private List<Token> tokenList = new ArrayList<>();
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		//enquanto não fim
-		Ler();//função de leitura
-		//loop final de arquivo
-			while (caracter == '{' || caracter == ' ') { //ou fim de arquivo
-				if (caracter == '{') {
-					while (caracter != '}') {// e arquivo não acabou
+		// Enquanto nao fim
+		getCharacter();	//funcao de leitura
+		// Loop final de arquivo
+			while (this.caracter == '{' || this.caracter == ' ') { //ou fim de arquivo
+				if (this.caracter == '{') {
+					while (this.caracter != '}') {// e arquivo nï¿½o acabou
 						Ler();
 					}
 				}
-				while (caracter == ' ') {
+				while (this.caracter == ' ') {
 					Ler();
 				}
 			}
-			//se não acabou
+			//se nao acabou
 			pegarToken();
 		//fim do loop final de arquivo
 	}
 	
 	private static void pegarToken() {
-		if (Character.isDigit(caracter)) {
+		if (Character.isDigit(this.caracter)) {
 			trataDigito();
 		}
 		else {
-			if (Character.isLetter(caracter)) {
+			if (Character.isLetter(this.caracter)) {
 				trataIdentPalaReser();
 			}
 			else {
-				if (caracter == ':') {
+				if (this.caracter == ':') {
 					trataAtribuicao();
 				}
 				else {
-					if (caracter == '+' || caracter == '-' || caracter == '*') {
+					if (this.caracter == '+' || this.caracter == '-' || this.caracter == '*') {
 						trataOA();
 					}
 					else {
-						if (caracter == '<' || caracter == '>' || caracter == '=') {
+						if (this.caracter == '<' || this.caracter == '>' || this.caracter == '=') {
 							trataOR();
 						}
 						else {
-							if (caracter == ';' || caracter == ',' || caracter == '(' || caracter == '.') {
+							if (this.caracter == ';' || this.caracter == ',' || this.caracter == '(' || this.caracter == '.') {
 								trataPontuacao();
 							}
 							else {
@@ -64,35 +63,34 @@ public class Tokenizer {
 
 	private static void trataDigito() {
 		String num = null;
-		num = num + caracter;
+		num = num + this.caracter;
 		Ler();
-		while(Character.isDigit(caracter)) {
-			num = num + caracter;
+		while(Character.isDigit(this.caracter)) {
+			num = num + this.caracter;
 			Ler();
 		}
-		//salva simbolo do token como valor de snumero
-		//salva o valor de num em token.lexema
-		
+		// Salva simbolo do token como valor de snumero
+		// Salva o valor de num em token.lexema
 	}
 	
 	private static void trataIdentPalaReser() {
 		String id = null;
-		id = id + caracter;
+		id = id + this.caracter;
 		Ler();
-		while (Character.isDigit(caracter) || Character.isLetter(caracter) || caracter == '_') {
-			id = id + caracter;
+		while (Character.isDigit(this.caracter) || Character.isLetter(this.caracter) || this.caracter == '_') {
+			id = id + this.caracter;
 			Ler();
 		}
-		//salvar id em lexema e descobrir qual o simbolo é
+		// Salvar id em lexema e descobrir qual o simbolo ï¿½
 		switch(id) {
 			case "programa":
-				//simbolo sprograma
+				// Simbolo sprograma
 				break;
 			case "se":
-				//simbolo sprograma
+				// Simbolo sprograma
 				break;
 			case "entao":
-				//simbolo sprograma
+				// Simbolo sprograma
 				break;
 			case "senao":
 				//simbolo sprograma
@@ -157,12 +155,12 @@ public class Tokenizer {
 	
 	private static void trataAtribuicao() {
 		String atr = null;
-		atr = atr + caracter;
-		if (caracter == ':') {
+		atr = atr + this.caracter;
+		if (this.caracter == ':') {
 			Ler();
-			if (caracter == '=') {
-				atr = atr + caracter;
-				//satribuição
+			if (this.caracter == '=') {
+				atr = atr + this.caracter;
+				//satribuicao
 			}
 			else {
 				//sdoispontos
@@ -171,15 +169,15 @@ public class Tokenizer {
 	}
 	
 	private static void trataOA() {
-		if (caracter == '+') {
+		if (this.caracter == '+') {
 			//smais
 		}
 		else {
-			if (caracter == '-') {
+			if (this.caracter == '-') {
 				//smenos
 			}
 			else {
-				if (caracter == '*') {
+				if (this.caracter == '*') {
 					//smult
 				}
 			}
@@ -189,11 +187,11 @@ public class Tokenizer {
 	
 	private static void trataOR() {
 		String or = null;
-		or = or + caracter;
-		if (caracter == '<') {
+		or = or + this.caracter;
+		if (this.caracter == '<') {
 			Ler();
-			if (caracter == '=') {
-				or = or + caracter;
+			if (this.caracter == '=') {
+				or = or + this.caracter;
 				//smenoring
 			}
 			else {
@@ -201,10 +199,10 @@ public class Tokenizer {
 			}
 		}
 		else {
-			if (caracter == '>') {
+			if (this.caracter == '>') {
 				Ler();
-				if (caracter == '=') {
-					or = or + caracter;
+				if (this.caracter == '=') {
+					or = or + this.caracter;
 					//smaioring
 				}
 				else {
@@ -212,7 +210,7 @@ public class Tokenizer {
 				}
 			}
 			else {
-				if (caracter == '=') {
+				if (this.caracter == '=') {
 					//sig
 					Ler();
 				}
@@ -226,6 +224,6 @@ public class Tokenizer {
 	
 	private static void Ler() {
 		count ++;
-		caracter = test.charAt(count);
+		this.caracter = test.charAt(count);
 	}
 }
