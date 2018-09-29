@@ -10,11 +10,20 @@ class Tokenizer {
     
     // Variaveis
     private char character;
+    private boolean isReading = false;
+    private Symbol symbols = new Symbol();
     private BufferedReader br;
-    private Symbol symbols;
 
 
     // Métodos
+    
+    public char getCharacter() {
+    	return this.character;
+    }
+    
+    public boolean fileIsOpen() {
+    	return this.isReading;
+    }
     
     public void openFile() {
     	FileReader fileReader;
@@ -23,6 +32,7 @@ class Tokenizer {
         try{
         	fileReader = new FileReader(this.fileName);
 	        this.br = new BufferedReader(fileReader);
+	        this.isReading = true;
         } catch (FileNotFoundException e) {
         	System.out.println(e);
         }
@@ -37,48 +47,86 @@ class Tokenizer {
 	    }
     }
     
-    // Main
-    public void getNewToken() {
-        
-        char ch;
-        this.symbols = new Symbol();
-        
-		getNewCharacter();
-		// Loop final de arquivo
-		while (this.character == '{' || this.character == ' ' || this.character == '}') { //ou fim de arquivo
-			getNewCharacter();
-		}
-
-		try {
-			getToken();
-		} catch (InvalidCharacterException e){
-			System.out.println(e);
-		}
-        
-    }
-    
     // Lê o próximo caracter do programa e atualiza a variavel da instância.
-    //  Parâmetros: Nenhum;
-    //  Retorno: Nenhum.
-    private void getNewCharacter() {
+    public void getNewCharacter() {
         try {
-            this.character = (char) this.br.read();
+        	
+        	int res;
+            res = this.br.read();
+            
+            if (res == -1) {
+            	this.isReading = false;
+            	this.character = ' ';
+            }
+            else
+            	this.character = (char) res;
         } catch (IOException e) {
             System.out.println(e);
         }
     }
     
+    // Main
+    public void getNewToken() {
+        
+        char ch;
+        
+		//getNewCharacter();
+		// Loop final de arquivo
+		while (this.character == '{' || this.character == ' ' || this.character == '\n') { //ou fim de arquivo
+			//System.out.print(this.character);
+			if (this.character == '{') {
+				while (this.character != '}') {// e arquivo n�o acabou
+					getNewCharacter();
+				}
+				getNewCharacter();
+			}
+			while (this.character == ' ' || this.character == '\n') {
+				getNewCharacter();
+			}
+			if(this.character == '\\'){
+				System.out.print("achei fim \n");
+			}
+		}
+
+		try {
+			Token token = getToken();
+			System.out.println(token.getLexeme() + " Type: " + token.getSymbol());
+			//System.out.print(this.character + "\n");
+		} catch (InvalidCharacterException e){
+			getNewCharacter();
+			System.out.println(e);
+		}
+        
+    }
+	
+	private Token atributionHandler() {
+		String atr = "";
+		atr += this.character;
+		getNewCharacter();
+		
+		if (this.character == '=') {
+			atr = atr + this.character;
+			getNewCharacter();
+			return new Token(atr, this.symbols.satribution);
+		}
+		else {
+			return new Token(atr, this.symbols.stwodots);
+		}
+	}
+	
+    
     public Token numberHandler() {
 		String num = "";
 		num = num + this.character;
+		
 		getNewCharacter();
+		
 		while(Character.isDigit(this.character)) {
 			num = num + this.character;
 			getNewCharacter();
 		}
 		
-		// Salva simbolo do token como valor de snumero
-		// Salva o valor de num em token.lexema
+		// Retorna um token com os dados coletados
 		return new Token(num, this.symbols.snumber);
 	}
 	
@@ -124,51 +172,39 @@ class Tokenizer {
 				symbol = this.symbols.swrite;
 				break;
 			case "leia":
-				//simbolo sprograma
 				symbol = this.symbols.sread;
 				break;
 			case "var":
-				//simbolo sprograma
 				symbol = this.symbols.svar;
 				break;
 			case "inteiro":
-				//simbolo sprograma
 				symbol = this.symbols.sinteger;
 				break;
 			case "boolean":
-				//simbolo sprograma
 				symbol = this.symbols.sboolean;
 				break;
 			case "verdadeiro":
-				//simbolo sprograma
 				symbol = this.symbols.strue;
 				break;
 			case "falso":
-				//simbolo sprograma
 				symbol = this.symbols.sfalse;
 				break;
 			case "procedimento":
-				//simbolo sprograma
 				symbol = this.symbols.sprocedure;
 				break;
 			case "funcao":
-				//simbolo sprograma
 				symbol = this.symbols.sfunction;
 				break;
 			case "div":
-				//simbolo sprograma
 				symbol = this.symbols.sdiv;
 				break;
 			case "e":
-				//simbolo sprograma
 				symbol = this.symbols.sand;
 				break;
 			case "ou":
-				//simbolo sprograma
 				symbol = this.symbols.sor;
 				break;
 			case "nao":
-				//simbolo sprograma
 				symbol = this.symbols.sno;
 				break;
 			default:
@@ -176,7 +212,7 @@ class Tokenizer {
 				break;
 		}
 		
-		System.out.println(id + " Type: " + symbol);
+		//getNewCharacter();
 		return new Token(id, symbol);
 	}
 	
@@ -185,10 +221,12 @@ class Tokenizer {
 		throws InvalidCharacterException {
 			
 		if (Character.isDigit(this.character)) {
+			//System.out.print(this.character);
 			return numberHandler();
 		}
 		else {
 			if (Character.isLetter(this.character)) {
+			//	System.out.print(this.character);
 				return identifierAndReservedWordHandler();
 			}
 			else {
@@ -205,9 +243,14 @@ class Tokenizer {
 						}
 						else {
 							if (this.character == ';' || this.character == ',' || this.character == '(' || this.character == '.') {
-								return trataPontuacao();
+								//System.out.print(this.character);
+								return punctuationHandler();
 							}
 							else {
+								// this.isReading = false;
+								if(this.character == '\n'){
+									System.out.print("oi");
+								}
 								throw new InvalidCharacterException("No character found.");
 							}
 						}
@@ -216,24 +259,6 @@ class Tokenizer {
 			}
 		}
 	}
-	
-	
-	private Token atributionHandler() {
-		String atr = "";
-		atr += this.character;
-		getNewCharacter();
-		
-		if (this.character == '=') {
-			atr = atr + this.character;
-			getNewCharacter();
-			return new Token(atr, this.symbols.satribution);
-		}
-		else {
-			getNewCharacter();
-			return new Token(atr, this.symbols.stwodots);
-		}
-	}
-	
 	private Token arithmeticOperatorHandler()
 		throws InvalidCharacterException {
 			
@@ -280,7 +305,6 @@ class Tokenizer {
 			}
 			else {
 				//smenor
-				getNewCharacter();
 				return new Token(operator, this.symbols.slesser);
 			}
 		}
@@ -295,7 +319,6 @@ class Tokenizer {
 				}
 				else {
 					//smaior
-					getNewCharacter();
 					return new Token(operator, this.symbols.sgreater);
 				}
 			}
@@ -312,18 +335,27 @@ class Tokenizer {
 		}
 	}
 	
-	private Token trataPontuacao()
+	private Token punctuationHandler()
 		throws InvalidCharacterException {
 		
 		String punctuation = "";
 		punctuation += this.character;
 		
-		if(this.character == ';')
+		if(this.character == ';'){
+			getNewCharacter();
 			return new Token(punctuation, this.symbols.ssemi_colon);
-		else if(this.character == ',')
+		}
+			
+		else if(this.character == ','){
+			getNewCharacter();
 			return new Token(punctuation, this.symbols.scolon);
-		else if(this.character == '.')
+		}
+			
+		else if(this.character == '.'){
+			getNewCharacter();
 			return new Token(punctuation, this.symbols.sdot);
+		}
+			
 		else throw new InvalidCharacterException("Missing punctuation.");
 	}
 	
