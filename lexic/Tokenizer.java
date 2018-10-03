@@ -246,7 +246,7 @@ class Tokenizer {
 							return relationalOperatorHandler();
 						}
 						else {
-							if (this.character == ';' || this.character == ',' || this.character == '(' || this.character == '.') {
+							if (this.character == ';' || this.character == ',' || this.character == '(' || this.character == '.' || this.character == ')') {
 								//System.out.print(this.character);
 								return punctuationHandler();
 							}
@@ -359,7 +359,17 @@ class Tokenizer {
 			getNewCharacter();
 			return new Token(punctuation, this.symbols.sdot);
 		}
-			
+		
+		else if(this.character == '('){
+			getNewCharacter();
+			return new Token(punctuation, this.symbols.sopen_parenthesis);
+		}
+		
+		else if(this.character == ')'){
+			getNewCharacter();
+			return new Token(punctuation, this.symbols.sclose_parenthesis);
+		}
+		
 		else throw new InvalidCharacterException("Missing punctuation.");
 	}
 	
