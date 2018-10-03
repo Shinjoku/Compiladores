@@ -7,7 +7,7 @@ public class Main {
         
         tokenizer.openFile();
 		tokenizer.getNewCharacter();
-        while(tokenizer.fileIsOpen()) {
+        while(tokenizer.fileIsOpen() == true) {
             // System.out.println(tokenizer.getCharacter());
 			tokenizer.getNewToken();
             //tokenizer.getCharacter();

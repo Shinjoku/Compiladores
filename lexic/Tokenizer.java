@@ -13,6 +13,7 @@ class Tokenizer {
     private boolean isReading = false;
     private Symbol symbols = new Symbol();
     private BufferedReader br;
+	private int lineCounter = 0;
 
 
     // Métodos
@@ -56,8 +57,8 @@ class Tokenizer {
             
             if (res == -1) {
             	this.isReading = false;
-            	this.character = ' ';
-            }
+				this.character = '&';
+			}
             else
             	this.character = (char) res;
         } catch (IOException e) {
@@ -66,28 +67,26 @@ class Tokenizer {
     }
     
     // Main
-    public void getNewToken() {
+    public Token getNewToken() {
         
         char ch;
         
-		//getNewCharacter();
 		// Loop final de arquivo
-		while (this.character == '{' || this.character == ' ' || this.character == '\n' || this.character == '\t') { //ou fim de arquivo
-			//System.out.print(this.character);
+		while ((this.character == '{' || this.character == ' ' || this.character == '\n' || this.character == '\t' || this.character == '\r') && this.isReading) { //ou fim de arquivo
 			if (this.character == '{') {
-				while (this.character != '}') {// e arquivo n�o acabou
+				while (this.character != '}' && this.isReading) {// e arquivo n�o acabou
 					getNewCharacter();
 				}
 				getNewCharacter();
 			}
-			while (this.character == ' ' || this.character == '\n') {
+			while (this.fileIsOpen() && (this.character == ' ' || this.character == '\n' || this.character == '\r') ) {
+				if(this.character == '\n'){
+					this.lineCounter++;
+				}
 				getNewCharacter();
 			}
-			if(this.character == '\n'){
-				System.out.print("achei fim \n");
-				getNewCharacter();
-			}
-			if(this.character == '\t'){
+
+			if(this.fileIsOpen() && this.character == '\t'){
 				getNewCharacter();
 			}
 		}
@@ -95,12 +94,16 @@ class Tokenizer {
 		try {
 			Token token = getToken();
 			System.out.println(token.getLexeme() + " Type: " + token.getSymbol());
-			//System.out.print(this.character + "\n");
+			return token;
 		} catch (InvalidCharacterException e){
-			getNewCharacter();
-			System.out.println(e);
-		}
-        
+			if(this.character != '&') {
+				System.out.println(e);
+				return null;
+			} else {
+				System.out.println("Arquivo finalizado com sucesso");
+				return null;
+			}	
+		}			
     }
 	
 	private Token atributionHandler() {
@@ -251,11 +254,7 @@ class Tokenizer {
 								return punctuationHandler();
 							}
 							else {
-								// this.isReading = false;
-								if(this.character == '\n'){
-									System.out.print("oi");
-								}
-								throw new InvalidCharacterException("No character found.");
+								throw new InvalidCharacterException("Invalid character on line " + this.lineCounter + ", before " + this.character);
 							}
 						}
 					}
