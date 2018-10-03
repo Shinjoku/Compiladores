@@ -72,7 +72,7 @@ class Tokenizer {
         
 		//getNewCharacter();
 		// Loop final de arquivo
-		while (this.character == '{' || this.character == ' ' || this.character == '\n') { //ou fim de arquivo
+		while (this.character == '{' || this.character == ' ' || this.character == '\n' || this.character == '\t') { //ou fim de arquivo
 			//System.out.print(this.character);
 			if (this.character == '{') {
 				while (this.character != '}') {// e arquivo n�o acabou
@@ -83,8 +83,12 @@ class Tokenizer {
 			while (this.character == ' ' || this.character == '\n') {
 				getNewCharacter();
 			}
-			if(this.character == '\\'){
+			if(this.character == '\n'){
 				System.out.print("achei fim \n");
+				getNewCharacter();
+			}
+			if(this.character == '\t'){
+				getNewCharacter();
 			}
 		}
 
