@@ -93,7 +93,7 @@ class Tokenizer {
 
 		try {
 			Token token = getToken();
-			System.out.println(token.getLexeme() + " Type: " + token.getSymbol());
+			//System.out.println(token.getLexeme() + " Type: " + token.getSymbol());
 			return token;
 		} catch (InvalidCharacterException e){
 			if(this.character != '&') {

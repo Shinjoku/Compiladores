@@ -1,6 +1,6 @@
 
 {Teste 1 - OK}
-{ Teste sem final de comentário......
+{ Teste sem final de comentário......}
 programa test1;
 
 var a,b,c: inteiro;
