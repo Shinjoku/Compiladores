@@ -2,26 +2,30 @@ import java.util.Scanner;
 
 public class Main {
 	
-	private Symbol symbols = new Symbol();
 	
     public static void main (String[] args) {
+	    
+	    Symbol symbols = new Symbol();
         
         Tokenizer tokenizer = new Tokenizer();
-		Token token = new Token(null, -1);
+		Token token;
         
         tokenizer.openFile();
 		tokenizer.getNewCharacter();
-        while(tokenizer.fileIsOpen() == true) {
+        while( tokenizer.fileIsOpen() ) {
             // System.out.println(tokenizer.getCharacter());
 			token = tokenizer.getNewToken();
-			if(token.getSymbol() == 1){
-				System.out.println(token.getLexeme() + " Type: " + token.getSymbol());
+			if(token.getSymbol() == symbols.sprogram){
+			    
+				System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
 				token = tokenizer.getNewToken();
-				if(token.getSymbol() == 16){
-					System.out.println(token.getLexeme() + " Type: " + token.getSymbol());
+				
+				if(token.getSymbol() == symbols.sidentifier){
+					System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
 					token = tokenizer.getNewToken();
-					if(token.getSymbol() == 19){
-						System.out.println(token.getLexeme() + " Type: " + token.getSymbol());
+					
+					if(token.getSymbol() == symbols.ssemi_colon){
+						System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
 						
 					}
 					

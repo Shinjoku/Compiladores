@@ -228,12 +228,10 @@ class Tokenizer {
 		throws InvalidCharacterException {
 			
 		if (Character.isDigit(this.character)) {
-			//System.out.print(this.character);
 			return numberHandler();
 		}
 		else {
 			if (Character.isLetter(this.character)) {
-			//	System.out.print(this.character);
 				return identifierAndReservedWordHandler();
 			}
 			else {
@@ -250,7 +248,6 @@ class Tokenizer {
 						}
 						else {
 							if (this.character == ';' || this.character == ',' || this.character == '(' || this.character == '.' || this.character == ')') {
-								//System.out.print(this.character);
 								return punctuationHandler();
 							}
 							else {
