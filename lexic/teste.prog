@@ -32,6 +32,7 @@ inicio
     se b > (c+ a*a)
     entao escreva(b)
     senao escreva(c)
-fim.
+fim
+.
 
 {fim}   
