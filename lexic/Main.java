@@ -56,7 +56,7 @@ public class Main {
 	private static void block_Analyze(){
 		token = tokenizer.getNewToken();
 		variable_Et_Analyze();
-		//subrotinas
+		subroutines_Analyze();
 		//comandos
 	}
 	
@@ -124,5 +124,76 @@ public class Main {
 		}
 		System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
 		token = tokenizer.getNewToken();
+	}
+	
+	//---------------------------SubRotinas--------------------------------//
+	private static void subroutines_Analyze(){
+		while((token.getSymbol() == symbols.sprocedure) || (token.getSymbol() == symbols.sfunction)){
+			if(token.getSymbol() == symbols.sprocedure){
+				procedire_Analyze();
+			}
+			else{
+				fuction_Analyze();
+			}
+			if(token.getSymbol() == symbols.ssemi_colon){
+				System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
+				token = tokenizer.getNewToken(); 
+			}
+			else{
+				System.out.println("ERRO subrotinas 1");
+			}
+		}
+	}
+	
+	//---------------------------Procedure Analyze-------------------------//
+	private static void procedire_Analyze(){
+		System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
+		token = tokenizer.getNewToken(); 
+		if(token.getSymbol() == symbols.sidentifier){
+			System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
+			token = tokenizer.getNewToken(); 
+			if(token.getSymbol() == symbols.ssemi_colon){
+				block_Analyze();
+			}
+			else{
+				System.out.println("ERRO Procedure Analyze 1");
+			}
+		}
+		else{
+			System.out.println("ERRO Procedure Analyze 2");
+		}
+	}
+	
+	//-----------------------Function Analyze------------------------//
+	private static void fuction_Analyze(){
+		System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
+		token = tokenizer.getNewToken(); 
+		if(token.getSymbol() == symbols.sidentifier){
+			System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
+			token = tokenizer.getNewToken(); 
+			if(token.getSymbol() == symbols.stwodots){
+				System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
+				token = tokenizer.getNewToken(); 
+				if((token.getSymbol() == symbols.sinteger) || (token.getSymbol() == symbols.sboolean)){
+					System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
+					token = tokenizer.getNewToken(); 
+					if(token.getSymbol() == symbols.ssemi_colon){
+						block_Analyze();
+					}
+					else{
+						System.out.println("ERRO Function Analyze 1");
+					}
+				}
+				else{
+					System.out.println("ERRO Function Analyze 2");
+				}
+			}
+			else{
+				System.out.println("ERRO Function Analyze 3");
+			}
+		}
+		else{
+			System.out.println("ERRO Function Analyze 4");
+		}
 	}
 }

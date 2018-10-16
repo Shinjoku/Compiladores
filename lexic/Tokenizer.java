@@ -187,7 +187,7 @@ class Tokenizer {
 			case "inteiro":
 				symbol = this.symbols.sinteger;
 				break;
-			case "boolean":
+			case "booleano":
 				symbol = this.symbols.sboolean;
 				break;
 			case "verdadeiro":
