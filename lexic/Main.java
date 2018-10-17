@@ -213,6 +213,7 @@ public class Main {
 				}
 				else{
 					System.out.println("ERRO Comands analyze 1");
+					break;
 				}
 			}
 			System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
@@ -223,6 +224,7 @@ public class Main {
 		}
 	}
 	
+	//----------------------------Comandos Simples---------------------------------//
 	private static void simple_Comands_Analyze(){
 		int valor;
 		
@@ -255,11 +257,18 @@ public class Main {
 		System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
 		token = tokenizer.getNewToken(); 
 		if(token.getSymbol() == symbols.satribution){
-			//atribuição analise
+			atribute_Analyze();
 		}
 		else{
-			//chamada procedimento
+			//chamada procedimento - no momento não faz nada, só no semantico
 		}
+	}
+	
+	//---------------------------------Atributo Analyze---------------------------------//
+	private static void atribute_Analyze(){
+		System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
+		token = tokenizer.getNewToken();
+		expression_Analyze();
 	}
 	
 	//--------------------------------IF----------------------------------------------//
@@ -309,22 +318,22 @@ public class Main {
 	
 	//--------------------------------Simples Expression-------------------------------//
 	private static void simple_Expression_Analyze(){
-		if((token.getSymbol() == symbols.sgreater) || (token.getSymbol() == symbols.slesser)){
+		if((token.getSymbol() == symbols.splus) || (token.getSymbol() == symbols.sminus)){
 			System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
 			token = tokenizer.getNewToken();
-			term_Analyze();
-			while((token.getSymbol() == symbols.sgreater) || (token.getSymbol() == symbols.slesser) || (token.getSymbol() == symbols.sor)){
+		}
+		term_Analyze();
+			while((token.getSymbol() == symbols.splus) || (token.getSymbol() == symbols.sminus) || (token.getSymbol() == symbols.sor)){
 				System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
 				token = tokenizer.getNewToken();
 				term_Analyze();
 			}
-		}
 	}
 	
 	//-------------------------------Termo-----------------------------------------------//
 	private static void term_Analyze(){
 		fact_Analyze();
-		while((token.getSymbol() == symbols.smult) || (token.getSymbol() == symbols.sdiv) || (token.getSymbol() == symbols.sif)){
+		while((token.getSymbol() == symbols.smult) || (token.getSymbol() == symbols.sdiv) || (token.getSymbol() == symbols.sand)){
 			System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
 			token = tokenizer.getNewToken();
 			fact_Analyze();
@@ -334,7 +343,8 @@ public class Main {
 	//--------------------------------Factor-----------------------------------------------//
 	private static void fact_Analyze(){
 		if(token.getSymbol() == symbols.sidentifier){
-			//chamada de função
+			System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
+			token = tokenizer.getNewToken();
 		}
 		else{
 			if(token.getSymbol() == symbols.snumber){

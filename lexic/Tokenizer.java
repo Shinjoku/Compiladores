@@ -243,7 +243,7 @@ class Tokenizer {
 						return arithmeticOperatorHandler();
 					}
 					else {
-						if (this.character == '<' || this.character == '>' || this.character == '=') {
+						if (this.character == '<' || this.character == '>' || this.character == '=' || this.character == '!') {
 							return relationalOperatorHandler();
 						}
 						else {
@@ -295,44 +295,59 @@ class Tokenizer {
 		String operator = "";
 		operator += this.character;
 		
-		if (this.character == '<') {
+		if(this.character == '!'){
 			getNewCharacter();
 			if (this.character == '=') {
 				operator = operator + this.character;
-				//smenoring
+				//sdif
 				getNewCharacter();
-				return new Token(operator, this.symbols.slessereq);
+				return new Token(operator, this.symbols.sdif);
 			}
-			else {
-				//smenor
-				return new Token(operator, this.symbols.slesser);
+			else{
+				throw new InvalidCharacterException("Missing relational operator.");
 			}
 		}
-		else {
-			if (this.character == '>') {
+		else{
+			if (this.character == '<') {
 				getNewCharacter();
 				if (this.character == '=') {
 					operator = operator + this.character;
-					//smaioring
+					//smenoring
 					getNewCharacter();
-					return new Token(operator, this.symbols.sgreatereq);
+					return new Token(operator, this.symbols.slessereq);
 				}
 				else {
-					//smaior
-					return new Token(operator, this.symbols.sgreater);
+					//smenor
+					return new Token(operator, this.symbols.slesser);
 				}
 			}
 			else {
-				if (this.character == '=') {
-					//sig
+				if (this.character == '>') {
 					getNewCharacter();
-					return new Token(operator, this.symbols.sequal);
+					if (this.character == '=') {
+						operator = operator + this.character;
+						//smaioring
+						getNewCharacter();
+						return new Token(operator, this.symbols.sgreatereq);
+					}
+					else {
+						//smaior
+						return new Token(operator, this.symbols.sgreater);
+					}
 				}
 				else {
-					throw new InvalidCharacterException("Missing relational operator.");
+					if (this.character == '=') {
+						//sig
+						getNewCharacter();
+						return new Token(operator, this.symbols.sequal);
+					}
+					else {
+						throw new InvalidCharacterException("Missing relational operator.");
+					}
 				}
 			}
 		}
+		
 	}
 	
 	private Token punctuationHandler()
