@@ -5,7 +5,7 @@ programa test1;
 
 var a,b,c: inteiro;
 
-procedimento analisa1;
+procedimento batata;
 var a, x: inteiro;
        z: booleano;
 inicio

@@ -26,6 +26,10 @@ class Tokenizer {
     	return this.isReading;
     }
     
+    public int getLineCounter(){
+    	return this.lineCounter;
+    }
+    
     public void openFile() {
     	FileReader fileReader;
     	
@@ -76,8 +80,10 @@ class Tokenizer {
 			if (this.character == '{') {
 				while (this.character != '}' && this.isReading) {// e arquivo n�o acabou
 					getNewCharacter();
+					if(this.character == '\n') this.lineCounter++;
 				}
 				getNewCharacter();
+				if(this.character == '\n') this.lineCounter++;
 			}
 			while (this.fileIsOpen() && (this.character == ' ' || this.character == '\n' || this.character == '\r') ) {
 				if(this.character == '\n'){
@@ -97,10 +103,10 @@ class Tokenizer {
 			return token;
 		} catch (InvalidCharacterException e){
 			if(this.character != '&') {
-				System.out.println(e);
+				System.out.println("LEXIC> " + e);
 				return null;
 			} else {
-				System.out.println("Arquivo finalizado com sucesso");
+				System.out.println("LEXIC> Compilation terminated successfully");
 				return null;
 			}	
 		}			
