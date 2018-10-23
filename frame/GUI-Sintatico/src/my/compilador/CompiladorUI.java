@@ -15,6 +15,9 @@ import javax.swing.text.BadLocationException;
  */
 public class CompiladorUI extends javax.swing.JFrame {
 
+    private static Symbol symbols;
+    private static Tokenizer tokenizer = new Tokenizer();
+    private static Token token;
     /**
      * Creates new form CompiladorUI
      */
@@ -131,16 +134,15 @@ public class CompiladorUI extends javax.swing.JFrame {
         //sintatic_Analyze();
         int i =1, ln = 1;
         String character = CodeArea.getText();
-        System.out.println(character);
+        tokenizer.setFile(character);
+        sintatic_Analyze();
     }//GEN-LAST:event_StartButtonActionPerformed
 
     /**
      * @param args the command line arguments
      */
     
-    private static Symbol symbols = new Symbol();
-    private static Tokenizer tokenizer;
-    private static Token token;
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -168,55 +170,52 @@ public class CompiladorUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                tokenizer = new Tokenizer(CodeArea, ErrorArea);
                 new CompiladorUI().setVisible(true);
             }
         });
     }
     
     private void sintatic_Analyze(){
-        tokenizer.openFile();
-		tokenizer.getNewCharacter();
+        
+        tokenizer.getNewCharacter();
+        symbols = new Symbol();
 		
-		try {
-	        while( tokenizer.fileIsOpen() ) {
-	            // System.out.println(tokenizer.getCharacter());
-				token = tokenizer.getNewToken();
-				if(token.getSymbol() == symbols.sprogram){
-				    
-					System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
-					token = tokenizer.getNewToken();
-					
-					if(token.getSymbol() == symbols.sidentifier){
-						System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
-						token = tokenizer.getNewToken();
-						
-						if(token.getSymbol() == symbols.ssemi_colon){
-							System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
-							block_Analyze();
-							if(token.getSymbol() == symbols.sdot){
-								if(tokenizer.fileIsOpen()){
-									System.out.println("The compilation was a success!");
-									tokenizer.closeFile();
-									break;
-								}
-								else throw new InvalidTokenException("Error 1: Wrong dot before '" + tokenizer.getCharacter() + "', on line " + tokenizer.getLineCounter());
-							}
-							else throw new InvalidTokenException("Error 2: Missing dot before '" + tokenizer.getCharacter() + "', on line " + tokenizer.getLineCounter());
-						}
-						else throw new InvalidTokenException("Error 3: Missing semi colon before '" + tokenizer.getCharacter() + "', on line " + tokenizer.getLineCounter());
-					}
-					else throw new InvalidTokenException("Error 4: Missing identifier on line " + (tokenizer.getLineCounter() - 1) );
-				}
-				else throw new InvalidTokenException("Error 5: Missing keyword 'program' on line " + tokenizer.getLineCounter());
-	        }
-	        
-	        if(tokenizer.fileIsOpen())
-	        	tokenizer.closeFile();
-	        
-	    } catch(InvalidTokenException e) {
-	    	System.out.println("SYNTATIC> " + e.getMessage() );
-	    }
+        try {
+            while( tokenizer.fileIsOpen() ) {
+                // System.out.println(tokenizer.getCharacter());
+                            token = tokenizer.getNewToken();
+                            if(token.getSymbol() == symbols.sprogram){
+
+                                    System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
+                                    token = tokenizer.getNewToken();
+
+                                    if(token.getSymbol() == symbols.sidentifier){
+                                            System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
+                                            token = tokenizer.getNewToken();
+                                            if(token.getSymbol() == symbols.ssemi_colon){
+                                                    System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
+                                                    block_Analyze();
+                                                    if(token.getSymbol() == symbols.sdot){
+                                                            if(tokenizer.getCountLetra() >= tokenizer.FileSize()){
+                                                                    ErrorArea.append("The compilation was a success!");
+                                                                    break;
+                                                            }
+                                                            else throw new InvalidTokenException("Error 1: Wrong dot before '" + tokenizer.getCharacter() + "', on line " + tokenizer.getLineCounter());
+                                                    }
+                                                    else throw new InvalidTokenException("Error 2: Missing dot before '" + tokenizer.getCharacter() + "', on line " + tokenizer.getLineCounter());
+                                            }
+                                            else throw new InvalidTokenException("Error 3: Missing semi colon before '" + tokenizer.getCharacter() + "', on line " + tokenizer.getLineCounter());
+                                    }
+                                    else throw new InvalidTokenException("Error 4: Missing identifier on line " + (tokenizer.getLineCounter() - 1) );
+                            }
+                            else throw new InvalidTokenException("Error 5: Missing keyword 'program' on line " + tokenizer.getLineCounter());
+            }
+
+            if(tokenizer.fileIsOpen())
+                    ErrorArea.append("\n Analysei Terminada");
+        } catch(InvalidTokenException e) {
+            System.out.println("SYNTATIC> " + e.getMessage() );
+        }
     }
     
     //-----------------Block---------------------//

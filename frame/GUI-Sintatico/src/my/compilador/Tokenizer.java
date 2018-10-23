@@ -19,7 +19,9 @@ class Tokenizer {
     
     // Constantes
     private final String fileName = "teste.prog";
-    JTextArea file, errorTarget;
+    JTextArea errorTarget;
+    private String fileText;
+//    String ;
     
     // Variaveis
     private char character;
@@ -27,13 +29,20 @@ class Tokenizer {
     private Symbol symbols = new Symbol();
     private BufferedReader br;
     private int lineCounter = 0;
+    private int countLetra = 0;
 
 
     // Métodos
+    public void setFile(String texto){
+        fileText = texto;
+    }
     
-    public Tokenizer(JTextArea file, JTextArea errorTarget){
-        file = file;
-        errorTarget = errorTarget;
+    public int getCountLetra(){
+        return this.countLetra;
+    }
+    
+    public int FileSize(){
+        return this.fileText.length();
     }
     
     public char getCharacter() {
@@ -48,89 +57,74 @@ class Tokenizer {
     	return this.lineCounter;
     }
     
-    public void openFile() {
-    	FileReader fileReader;
-    	
-    	// Abre o arquivo para leitura
-        try{
-        	fileReader = new FileReader(this.fileName);
-	        this.br = new BufferedReader(fileReader);
-	        this.isReading = true;
-        } catch (FileNotFoundException e) {
-        	System.out.println(e);
-        }
-    }
-    
-    public void closeFile() {
-    	// Fecha o arquivo
-	    try{
-        	this.br.close();
-	    } catch(IOException e) {
-	    	System.out.println(e);
-	    }
-    }
     
     // Lê o próximo caracter do programa e atualiza a variavel da instância.
     public void getNewCharacter() {
-        try {
-        	
-        	int res;
-            res = this.br.read();
-            
-            if (res == -1) {
-            	this.isReading = false;
-				this.character = '&';
-			}
-            else
-            	this.character = (char) res;
-        } catch (IOException e) {
-            System.out.println(e);
+        char letra = '\0';
+        if(countLetra < fileText.length()){
+            letra = fileText.charAt(countLetra);
+            countLetra++;
+            if(letra == '\0'){
+                this.isReading = false;
+                this.character = '&';
+            }
+            else{
+                this.character = letra;
+                this.isReading = true;
+            }
         }
+        else{
+            this.isReading = false;
+            this.countLetra = 0;
+            this.lineCounter = 0;
+            this.fileText = "\0";
+        }
+        
+            
     }
     
     // Main
     public Token getNewToken() {
         
         char ch;
-        
-		// Loop final de arquivo
-		while ((this.character == '{' || this.character == ' ' || this.character == '\n' || this.character == '\t' || this.character == '\r') && this.isReading) { //ou fim de arquivo
-			if (this.character == '{') {
-				while (this.character != '}' && this.isReading) {// e arquivo n�o acabou
-					getNewCharacter();
-					if(this.character == '\n') this.lineCounter++;
-				}
-				getNewCharacter();
-				if(this.character == '\n') this.lineCounter++;
-			}
-			while (this.fileIsOpen() && (this.character == ' ' || this.character == '\n' || this.character == '\r') ) {
-				if(this.character == '\n'){
-					this.lineCounter++;
-				}
-				getNewCharacter();
-			}
-
-			if(this.fileIsOpen() && this.character == '\t'){
-				getNewCharacter();
-			}
-		}
-
-		try {
-			Token token = getToken();
-			//System.out.println(token.getLexeme() + " Type: " + token.getSymbol());
-			return token;
-		} catch (InvalidCharacterException e){
-			if(this.character != '&') {
-				System.out.println("LEXIC> " + e);
-				return null;
-			} else {
-				System.out.println("LEXIC> Compilation terminated successfully");
-				return null;
-			}	
-		}			
+        // Loop final de arquivo
+	while ((this.character == '{' || this.character == ' ' || this.character == '\n' || this.character == '\t' || this.character == '\r') && this.isReading) { //ou fim de arquivo
+            if (this.character == '{') {
+                while (this.character != '}' && this.isReading) {// e arquivo n�o acabou
+                    getNewCharacter();
+                    if(this.character == '\n') this.lineCounter++;
+                }
+                getNewCharacter();
+                if(this.character == '\n') this.lineCounter++;
+            }
+            while (this.fileIsOpen() && (this.character == ' ' || this.character == '\n' || this.character == '\r') ) {
+                if(this.character == '\n'){
+                    this.lineCounter++;
+                }
+                getNewCharacter();
+            }
+            if(this.fileIsOpen() && this.character == '\t'){
+                getNewCharacter();
+            }
+        }
+        try {
+            //System.out.println(this.character);
+            Token token = getToken();
+            //System.out.println(token.getLexeme() + " Type: " + token.getSymbol());
+            return token;
+        } catch (InvalidCharacterException e){
+            if(this.character != '&') {
+                System.out.println("LEXIC> " + e);
+                return null;
+            } else {
+                System.out.println("LEXIC> Compilation terminated successfully");
+                return null;
+            }	
+        }			
     }
-	
-	private Token atributionHandler() {
+    
+    
+    private Token atributionHandler() {
 		String atr = "";
 		atr += this.character;
 		getNewCharacter();
@@ -256,6 +250,7 @@ class Tokenizer {
 		}
 		else {
 			if (Character.isLetter(this.character)) {
+                           // System.out.println(this.character);
 				return identifierAndReservedWordHandler();
 			}
 			else {
