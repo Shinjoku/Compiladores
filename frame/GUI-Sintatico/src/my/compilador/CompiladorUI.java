@@ -130,12 +130,8 @@ public class CompiladorUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         //sintatic_Analyze();
         int i =1, ln = 1;
-        try {
-            String character = CodeArea.getText(i,ln);
-            System.out.println(character);
-        } catch (BadLocationException ex) {
-            Logger.getLogger(CompiladorUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        String character = CodeArea.getText();
+        System.out.println(character);
     }//GEN-LAST:event_StartButtonActionPerformed
 
     /**
@@ -143,7 +139,7 @@ public class CompiladorUI extends javax.swing.JFrame {
      */
     
     private static Symbol symbols = new Symbol();
-    private static Tokenizer tokenizer = new Tokenizer();
+    private static Tokenizer tokenizer;
     private static Token token;
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -172,6 +168,7 @@ public class CompiladorUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                tokenizer = new Tokenizer(CodeArea, ErrorArea);
                 new CompiladorUI().setVisible(true);
             }
         });
@@ -571,9 +568,9 @@ public class CompiladorUI extends javax.swing.JFrame {
 	}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextArea CodeArea;
+    private static javax.swing.JTextArea CodeArea;
     private javax.swing.JPanel CodePanel;
-    private javax.swing.JTextArea ErrorArea;
+    private static javax.swing.JTextArea ErrorArea;
     private javax.swing.JPanel ErrorPanel;
     private javax.swing.JButton StartButton;
     private javax.swing.JScrollPane jScrollPane1;

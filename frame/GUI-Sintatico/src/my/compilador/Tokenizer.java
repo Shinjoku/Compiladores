@@ -19,7 +19,7 @@ class Tokenizer {
     
     // Constantes
     private final String fileName = "teste.prog";
-    JTextArea file;
+    JTextArea file, errorTarget;
     
     // Variaveis
     private char character;
@@ -30,6 +30,11 @@ class Tokenizer {
 
 
     // Métodos
+    
+    public Tokenizer(JTextArea file, JTextArea errorTarget){
+        file = file;
+        errorTarget = errorTarget;
+    }
     
     public char getCharacter() {
     	return this.character;
