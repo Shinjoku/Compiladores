@@ -51,5 +51,6 @@ public class Symbol {
     public final int stwodots       	    = 36;
     public final int strue                  = 37;
     public final int sfalse                 = 38;
+    public final int sclose_file            = 39;
 }
 

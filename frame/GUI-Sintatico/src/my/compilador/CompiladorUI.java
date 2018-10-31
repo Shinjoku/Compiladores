@@ -5,9 +5,7 @@
  */
 package my.compilador;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.text.BadLocationException;
+
 
 /**
  *
@@ -57,7 +55,7 @@ public class CompiladorUI extends javax.swing.JFrame {
             CodePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(CodePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
                 .addContainerGap())
         );
         CodePanelLayout.setVerticalGroup(
@@ -70,6 +68,7 @@ public class CompiladorUI extends javax.swing.JFrame {
 
         ErrorPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Erros", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
+        ErrorArea.setEditable(false);
         ErrorArea.setColumns(20);
         ErrorArea.setRows(5);
         jScrollPane2.setViewportView(ErrorArea);
@@ -80,7 +79,7 @@ public class CompiladorUI extends javax.swing.JFrame {
             ErrorPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ErrorPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
                 .addContainerGap())
         );
         ErrorPanelLayout.setVerticalGroup(
@@ -106,9 +105,9 @@ public class CompiladorUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(CodePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(ErrorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(CodePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(ErrorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(StartButton)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -123,7 +122,7 @@ public class CompiladorUI extends javax.swing.JFrame {
                     .addComponent(ErrorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(StartButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
@@ -133,8 +132,9 @@ public class CompiladorUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         //sintatic_Analyze();
         int i =1, ln = 1;
-        String character = CodeArea.getText();
-        tokenizer.setFile(character);
+        tokenizer.setCount(0,0);
+        tokenizer.setFile(CodeArea.getText());
+        System.out.println(CodeArea.getText().length());
         sintatic_Analyze();
     }//GEN-LAST:event_StartButtonActionPerformed
 
@@ -196,10 +196,13 @@ public class CompiladorUI extends javax.swing.JFrame {
                                                     System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
                                                     block_Analyze();
                                                     if(token.getSymbol() == symbols.sdot){
-                                                            if(tokenizer.getCountLetra() >= tokenizer.FileSize()){
-                                                                    ErrorArea.append("The compilation was a success!");
-                                                                    break;
-                                                            }
+                                                        System.out.println("SYNTATIC> " + token.getLexeme() + " Type: " + token.getSymbol());
+                                                        token = tokenizer.getNewToken();               
+                                                            if(token.getSymbol() == symbols.sclose_file){
+									System.out.println("The compilation was a success!");
+									tokenizer.fileClose();
+									break;
+								}
                                                             else throw new InvalidTokenException("Error 1: Wrong dot before '" + tokenizer.getCharacter() + "', on line " + tokenizer.getLineCounter());
                                                     }
                                                     else throw new InvalidTokenException("Error 2: Missing dot before '" + tokenizer.getCharacter() + "', on line " + tokenizer.getLineCounter());
@@ -211,9 +214,10 @@ public class CompiladorUI extends javax.swing.JFrame {
                             else throw new InvalidTokenException("Error 5: Missing keyword 'program' on line " + tokenizer.getLineCounter());
             }
 
-            if(tokenizer.fileIsOpen())
-                    ErrorArea.append("\n Analysei Terminada");
+            if(!tokenizer.fileIsOpen())
+                    ErrorArea.setText("\n Analise Terminada\n");
         } catch(InvalidTokenException e) {
+            ErrorArea.setText("SYNTATIC> " + e.getMessage());
             System.out.println("SYNTATIC> " + e.getMessage() );
         }
     }

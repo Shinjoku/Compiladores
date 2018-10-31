@@ -29,12 +29,17 @@ class Tokenizer {
     private Symbol symbols = new Symbol();
     private BufferedReader br;
     private int lineCounter = 0;
-    private int countLetra = 0;
+    public int countLetra = 0;
 
 
     // Métodos
     public void setFile(String texto){
         fileText = texto;
+    }
+    
+    public void setCount(int letter, int line){
+        this.countLetra = letter;
+        this.lineCounter = line;
     }
     
     public int getCountLetra(){
@@ -51,6 +56,11 @@ class Tokenizer {
     
     public boolean fileIsOpen() {
     	return this.isReading;
+    }
+    
+    public void fileClose(){
+        this.isReading = false;
+    
     }
     
     public int getLineCounter(){
@@ -75,9 +85,6 @@ class Tokenizer {
         }
         else{
             this.isReading = false;
-            this.countLetra = 0;
-            this.lineCounter = 0;
-            this.fileText = "\0";
         }
         
             
@@ -87,40 +94,40 @@ class Tokenizer {
     public Token getNewToken() {
         
         char ch;
-        // Loop final de arquivo
-	while ((this.character == '{' || this.character == ' ' || this.character == '\n' || this.character == '\t' || this.character == '\r') && this.isReading) { //ou fim de arquivo
-            if (this.character == '{') {
-                while (this.character != '}' && this.isReading) {// e arquivo n�o acabou
+        while(countLetra <= fileText.length()){
+            while ((this.character == '{' || this.character == ' ' || this.character == '\n' || this.character == '\t' || this.character == '\r') && this.isReading) { //ou fim de arquivo
+                if (this.character == '{') {
+                    while (this.character != '}' && this.isReading) {// e arquivo n�o acabou
+                        getNewCharacter();
+                        if(this.character == '\n') this.lineCounter++;
+                    }
                     getNewCharacter();
                     if(this.character == '\n') this.lineCounter++;
                 }
-                getNewCharacter();
-                if(this.character == '\n') this.lineCounter++;
-            }
-            while (this.fileIsOpen() && (this.character == ' ' || this.character == '\n' || this.character == '\r') ) {
-                if(this.character == '\n'){
-                    this.lineCounter++;
+                while (this.fileIsOpen() && (this.character == ' ' || this.character == '\n' || this.character == '\r') ) {
+                    if(this.character == '\n'){
+                        this.lineCounter++;
+                    }
+                    getNewCharacter();
                 }
-                getNewCharacter();
+                if(this.fileIsOpen() && this.character == '\t'){
+                    getNewCharacter();
+                }
             }
-            if(this.fileIsOpen() && this.character == '\t'){
-                getNewCharacter();
-            }
-        }
-        try {
+            try {
             //System.out.println(this.character);
             Token token = getToken();
             //System.out.println(token.getLexeme() + " Type: " + token.getSymbol());
             return token;
-        } catch (InvalidCharacterException e){
-            if(this.character != '&') {
-                System.out.println("LEXIC> " + e);
-                return null;
-            } else {
-                System.out.println("LEXIC> Compilation terminated successfully");
-                return null;
-            }	
-        }			
+            } catch (InvalidCharacterException e){
+                if(this.character != '&') {
+                    System.out.println("LEXIC> " + e);
+                    return null;
+                }	
+            }
+        }
+	System.out.println("LEXIC> Compilation terminated successfully");
+        return new Token("sclose_file", 39);
     }
     
     
@@ -162,9 +169,10 @@ class Tokenizer {
 		id = id + this.character;
 		getNewCharacter();
 		
-		while (Character.isDigit(this.character) || Character.isLetter(this.character) || this.character == '_') {
+		while ((Character.isDigit(this.character) || Character.isLetter(this.character) || this.character == '_') && fileIsOpen()) {
 			id = id + this.character;
 			getNewCharacter();
+                        System.out.println("oi");
 		}
 		
 		// Salvar id em lexema e descobrir qual o simbolo eh
@@ -386,7 +394,7 @@ class Tokenizer {
 		}
 			
 		else if(this.character == '.'){
-			getNewCharacter();
+			countLetra++;
 			return new Token(punctuation, this.symbols.sdot);
 		}
 		
